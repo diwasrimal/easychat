@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const expiryDuration = time.Minute * 10
+const expiryDuration = time.Hour * 24 * 7
 
 var secret []byte
 
