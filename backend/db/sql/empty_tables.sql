@@ -1,1 +1,1 @@
-TRUNCATE users, messages, user_sessions, conversations, friends, friend_requests RESTART IDENTITY;
+TRUNCATE users, messages, conversations RESTART IDENTITY;

@@ -6,11 +6,6 @@ INSERT INTO users(fullname, email, password_hash) VALUES
 	('Mohan Devkota', 'mohan@gmail.com', '$2a$10$bonHqtMXx4V6q550CE4AwuhPx5kF2RPCf7QqJZLSdd9aguVfbn4Ta'), -- mohan
 	('Rita Gurung', 'rita@gmail.com', '$2a$10$v49I8/eiUOf.u6jflGiFw.zSlIB0NLbJFB8yB7PZbAUllxPc737bC'); -- rita
 
-INSERT INTO friends VALUES
-	(1, 2),
-	(1, 3),
-	(4, 5);
-
 INSERT INTO messages (sender_id, receiver_id, text, timestamp) VALUES
 	(1, 2, 'Hey Shyam, want to go hiking this weekend?', '2024-05-25 14:23:00+00'),
 	(2, 1, 'Sure Ram, sounds great!', '2024-05-25 14:25:00+00'),
@@ -47,6 +42,3 @@ INSERT INTO conversations (user1_id, user2_id, timestamp) VALUES
 	(4, 5, '2024-05-25 16:15:00+00')
 	ON CONFLICT (LEAST(user1_id, user2_id), GREATEST(user1_id, user2_id))
 	DO UPDATE SET timestamp = excluded.timestamp;
-
-INSERT INTO friend_requests(requestor_id, receiver_id) VALUES
-	(4, 1);	-- mohan -> ram

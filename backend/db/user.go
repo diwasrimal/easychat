@@ -19,20 +19,6 @@ func CreateUser(fullname, email, passwordHash string) error {
 	return err
 }
 
-// func UpdateUser(userId uint64, newUser models.User) error {
-// 	_, err := pool.Exec(
-// 		context.Background(),
-// 		"UPDATE users SET "+
-// 			"fullname = $1, "+
-// 			"bio = $2 "+
-// 			"WHERE id = $3",
-// 		newUser.Fullname,
-// 		newUser.Email,
-// 		userId,
-// 	)
-// 	return err
-// }
-
 func GetUserByEmail(email string) (*models.User, error) {
 	var user models.User
 	if err := pool.QueryRow(
@@ -62,23 +48,6 @@ func GetUserById(id uint64) (*models.User, error) {
 	}
 	return &user, nil
 }
-
-// func GetUserBySessionId(sessionId string) (*models.User, error) {
-// 	var user models.User
-// 	if err := pool.QueryRow(
-// 		context.Background(),
-// 		"SELECT * FROM users WHERE id = ( "+
-// 			"SELECT user_id FROM user_sessions WHERE session_id = $1 "+
-// 			")",
-// 		sessionId,
-// 	).Scan(&user.Id, &user.Fullname, &user.Email, &user.PasswordHash); err != nil {
-// 		if err == pgx.ErrNoRows {
-// 			return nil, nil
-// 		}
-// 		return nil, err
-// 	}
-// 	return &user, nil
-// }
 
 func IsEmailRegistered(email string) (bool, error) {
 	rows, err := pool.Query(

@@ -9,11 +9,6 @@ type User struct {
 	Email        string `json:"-"`
 }
 
-type Session struct {
-	UserId    uint64
-	SessionId string
-}
-
 type Message struct {
 	Id         uint64    `json:"id"`
 	SenderId   uint64    `json:"senderId"`
