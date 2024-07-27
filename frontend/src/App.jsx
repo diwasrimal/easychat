@@ -12,7 +12,7 @@ export default function App() {
     return () => {
       sessionStorage.clear();
     };
-  });
+  }, []);
 
   console.log("<App />");
 
