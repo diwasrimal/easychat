@@ -33,11 +33,7 @@ func main() {
 	db.MustInit(dburl)
 	defer db.Close()
 
-	// log.Println(jwt.VerifyAndDecode("eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJleHAiOjE3MjA4MDE5NDIsImlhdCI6MTcyMDgwMTM0MiwidXNlcklkIjoxfQ.QtapUVDZvFPtdzDjoBflCpAcs8j9zLYT-EAi4V6Lvow"))
-
 	handlers := map[string]http.Handler{
-		// "GET /api/logout":            mw.UseJson(api.MakeHandler(routes.LogoutGet)),
-		// "GET /api/login-status":      mw.UseAuth(api.MakeHandler(routes.LoginStatusGet)),
 		"GET /api/auth":              mw.UseAuth(api.MakeHandler(routes.AuthGet)),
 		"GET /api/users/{id}":        mw.UseAuth(mw.UseJson(api.MakeHandler(routes.UsersGet))),
 		"GET /api/chat-partners":     mw.UseAuth(mw.UseJson(api.MakeHandler(routes.ChatPartnersGet))),

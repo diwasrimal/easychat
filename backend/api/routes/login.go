@@ -61,7 +61,7 @@ func LoginPost(w http.ResponseWriter, r *http.Request) api.Response {
 	token := jwt.Create(types.Json{"userId": user.Id})
 	return api.Response{
 		Code:    http.StatusOK,
-		Payload: types.Json{"jwt": token},
+		Payload: types.Json{"jwt": token, "userId": user.Id},
 	}
 }
 
