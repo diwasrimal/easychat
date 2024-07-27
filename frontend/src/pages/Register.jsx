@@ -39,7 +39,7 @@ export default function Register() {
       .then((res) => makePayload(res))
       .then((payload) => {
         if (!payload.ok) {
-          setErr(payload.data.message || "Some error occurred!");
+          setErr(payload.message || "Some error occurred!");
         } else {
           setRegistered(true);
           setErr("");

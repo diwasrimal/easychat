@@ -1,14 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import AuthProvider from "./contexts/AuthProvider.jsx";
 import Welcome from "./pages/Welcome.jsx";
 import "./index.css";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
+import Home from "./pages/Home.jsx";
 import App from "./App.jsx";
 import ProtectedRoute from "./wrappers/ProtectedRoute.jsx";
+import ChatList from "./components/ChatList.jsx";
+import People from "./components/People.jsx";
+import Logout from "./components/Logout.jsx";
+import { WebsocketProvider } from "./contexts/WebsocketProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -16,12 +24,28 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/dashboard",
+    path: "/home",
     element: (
       <ProtectedRoute>
-        <Dashboard />
+        <WebsocketProvider>
+          <Home />
+        </WebsocketProvider>
       </ProtectedRoute>
     ),
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/home/chats" />,
+      },
+      {
+        path: "chats",
+        element: <ChatList />,
+      },
+      {
+        path: "people",
+        element: <People />,
+      },
+    ],
   },
   {
     path: "/welcome",
@@ -30,6 +54,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/logout",
+    element: <Logout />,
   },
   {
     path: "/register",

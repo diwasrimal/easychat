@@ -3,9 +3,16 @@ import { AuthContext } from "./contexts/AuthProvider";
 import Loading from "./components/Loading.jsx";
 import ContentCenteredDiv from "./components/ContentCenteredDiv.jsx";
 import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function App() {
   const { loggedIn, checking } = useContext(AuthContext);
+
+  useEffect(() => {
+    return () => {
+      sessionStorage.clear();
+    };
+  });
 
   console.log("<App />");
 
@@ -23,5 +30,5 @@ export default function App() {
     console.log("user not logged in navigating to welcome screen");
   }
 
-  return <Navigate to={loggedIn ? "/dashboard" : "/welcome"} />;
+  return <Navigate to={loggedIn ? "/home" : "/welcome"} />;
 }

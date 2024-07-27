@@ -1,63 +1,3 @@
-// import { useRef, useState } from "react";
-
-// export default function Login() {
-//   const phoneInput = useRef(null);
-//   const passwordInput = useRef(null);
-//   const [err, setErr] = useState("");
-
-//   function handleLogin(e) {
-//     e.preventDefault();
-//     const phone = phoneInput.current.value.trim();
-//     const pass = passwordInput.current.value;
-//     if (!phone || !pass) {
-//       setErr("Missing login details");
-//       return;
-//     }
-//   }
-
-//   return (
-//     <main className="container h-100 d-flex flex-column gap-4 justify-content-center align-items-center">
-//       <h2>Login to FutsalHub</h2>
-//       <form onSubmit={handleLogin} className="d-flex flex-column">
-//         {/* Phone  */}
-//         <div className="mb-3">
-//           <label htmlFor="phone-input" className="form-label">
-//             Phone number
-//           </label>
-//           <input
-//             type="tel"
-//             pattern="[0-9]{10}"
-//             ref={phoneInput}
-//             className="form-control"
-//             placeholder="9841111111"
-//             id="phone-input"
-//           />
-//         </div>
-//         {/* Password  */}
-//         <div className="mb-3">
-//           <label htmlFor="password-input" className="form-label">
-//             Password
-//           </label>
-//           <input
-//             type="password"
-//             ref={passwordInput}
-//             className="form-control"
-//             placeholder="Enter your password"
-//             id="password-input"
-//           />
-//         </div>
-//         {err && <p className="text-danger">{err}</p>}
-//         <button type="submit" className="btn btn-primary mt-3">
-//           Login
-//         </button>
-//       </form>
-//       <p>
-//         Don't have an account? <a href="/register">Register</a> here.
-//       </p>
-//     </main>
-//   );
-// }
-
 import { useRef, useState } from "react";
 import { makePayload } from "../utils/utils";
 import { useContext } from "react";
@@ -70,7 +10,7 @@ export default function Login() {
   const [err, setErr] = useState("");
 
   // Upon successful login, authentication context values will
-  // be filled and we redirect to /dashboard
+  // be filled and we redirect to /home
   const { loggedIn, setLoggedIn, setUserId } = useContext(AuthContext);
 
   function handleLogin(e) {
@@ -92,15 +32,16 @@ export default function Login() {
         if (payload.ok) {
           setErr("");
           setLoggedIn(true);
-          setUserId(payload.data.userId);
-          localStorage.setItem("jwt", payload.data.jwt);
+          setUserId(payload.userId);
+          localStorage.setItem("jwt", payload.jwt);
+          localStorage.setItem("loggedInUserId", payload.userId);
         } else {
-          setErr(payload.data.message || "Unkown error occurred");
+          setErr(payload.message || "Unkown error occurred");
         }
       });
   }
 
-  if (loggedIn) return <Navigate to="/dashboard" />;
+  if (loggedIn) return <Navigate to="/home" />;
 
   return (
     <main className="container h-100 d-flex flex-column gap-4 justify-content-center align-items-center">

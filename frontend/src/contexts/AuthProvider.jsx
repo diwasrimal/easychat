@@ -23,14 +23,14 @@ export default function AuthProvider({ children }) {
     }
     fetch("/api/auth", {
       headers: {
-        Authorization: `Bearer: ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => makePayload(res))
       .then((payload) => {
         if (payload.ok) {
           setLoggedIn(true);
-          setUserId(payload.data.userId);
+          setUserId(payload.userId);
         }
         setChecking(false);
       });
