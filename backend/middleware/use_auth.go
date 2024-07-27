@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/diwasrimal/easychat/backend/jwt"
 	"github.com/diwasrimal/easychat/backend/types"
@@ -22,11 +23,19 @@ func UseAuth(next http.Handler) http.Handler {
 			return
 		}
 		token := parts[1]
-		valid, jwtPayload := jwt.VerifyAndDecode(token)
-		if !valid {
+
+		// Ensure that token has valid signature and is not expired
+		validSignature, jwtPayload := jwt.VerifyAndDecode(token)
+		if !validSignature {
 			utils.SendJsonResp(w, http.StatusUnauthorized, types.Json{"message": "Invalid token"})
 			return
 		}
+		expTime := int64(jwtPayload["exp"].(float64))
+		if time.Now().Unix() > expTime {
+			utils.SendJsonResp(w, http.StatusUnauthorized, types.Json{"message": "Token has expired"})
+			return
+		}
+
 		userId := uint64(jwtPayload["userId"].(float64))
 		ctx := context.WithValue(r.Context(), "userId", userId)
 
