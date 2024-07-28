@@ -49,9 +49,6 @@ func main() {
 		mux.Handle(route, handler)
 	}
 
-	// Fileserver to get static files
-	mux.Handle("GET /static/", http.StripPrefix("/static", http.FileServer(http.Dir("./static"))))
-
 	var finalHandler http.Handler
 
 	switch runMode {

@@ -1,11 +1,8 @@
-import { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { FaHome, FaUserFriends, FaCog, FaSignOutAlt } from "react-icons/fa";
-import { Outlet } from "react-router-dom";
+import { FaCog, FaHome, FaSignOutAlt, FaUserFriends } from "react-icons/fa";
+import { NavLink, Outlet } from "react-router-dom";
 import CurrChat from "../components/CurrChat";
-import CurrChatPartnerProvider from "../contexts/CurrChatPartnerProvider";
 import { ChatPartnersProvider } from "../contexts/ChatPartnersProvider";
-import { NavLink } from "react-router-dom";
+import CurrChatPartnerProvider from "../contexts/CurrChatPartnerProvider";
 
 export default function Home() {
   return (

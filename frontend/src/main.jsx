@@ -17,6 +17,8 @@ import ChatList from "./components/ChatList.jsx";
 import People from "./components/People.jsx";
 import Logout from "./components/Logout.jsx";
 import { WebsocketProvider } from "./contexts/WebsocketProvider.jsx";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const router = createBrowserRouter([
   {
