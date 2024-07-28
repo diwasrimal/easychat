@@ -14,20 +14,12 @@ export default function App() {
     };
   }, []);
 
-  console.log("<App />");
-
   if (checking) {
     return (
       <ContentCenteredDiv>
         <Loading />
       </ContentCenteredDiv>
     );
-  }
-
-  if (loggedIn) {
-    console.log("user logged in, navigating to dasboard");
-  } else {
-    console.log("user not logged in navigating to welcome screen");
   }
 
   return <Navigate to={loggedIn ? "/home" : "/welcome"} />;

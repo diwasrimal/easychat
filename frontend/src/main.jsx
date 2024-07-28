@@ -10,7 +10,7 @@ import Welcome from "./pages/Welcome.jsx";
 import "./index.css";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
-import Home from "./pages/Home.jsx";
+import Home from "./layouts/Home.jsx";
 import App from "./App.jsx";
 import ProtectedRoute from "./wrappers/ProtectedRoute.jsx";
 import ChatList from "./components/ChatList.jsx";
