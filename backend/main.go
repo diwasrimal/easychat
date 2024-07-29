@@ -12,10 +12,13 @@ import (
 	"github.com/diwasrimal/easychat/backend/jwt"
 	mw "github.com/diwasrimal/easychat/backend/middleware"
 	"github.com/diwasrimal/easychat/backend/utils"
-	_ "github.com/joho/godotenv/autoload"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	godotenv.Load("../.env")
+
 	var (
 		dbfile    = utils.MustGetEnv("DB_FILE")
 		port      = utils.MustGetEnv("SERVER_PORT")

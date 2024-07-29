@@ -22,7 +22,7 @@ RUN CGO_ENABLED=1 GOOS=linux go build -ldflags '-s -w' -o app .
 FROM alpine
 WORKDIR /app
 COPY --from=frontend-builder frontend/dist ./dist
-COPY --from=backend-builder backend/app backend/.env ./
+COPY --from=backend-builder backend/app ./
 
 EXPOSE 3030
 
