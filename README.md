@@ -22,8 +22,8 @@ go run .
 
 3. Run frontend
 
-A proxy is set up at `frontend/vite.config.js` to to redirect requests to `localhost:3030`,
-which  is the default port where the backend server runs. If you changed the `SERVER_ADDR` in
+A proxy is set up at `frontend/vite.config.js` to redirect requests to the backend API.
+which  is the default port where the backend server runs. If you changed the `SERVER_PORT` in
 `backend/.env` you need to update the vite config file to match the changed port.
 
 ```sh

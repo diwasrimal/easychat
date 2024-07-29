@@ -3,6 +3,8 @@ todo.txt
 flask-backend
 backend/db-postgres
 backend/backend
+backend/app
+backend/easychat.db
 .env
 .zed
 tmp.txt
