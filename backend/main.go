@@ -1,12 +1,10 @@
 package main
 
 import (
-	"bufio"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/diwasrimal/easychat/backend/api"
 	"github.com/diwasrimal/easychat/backend/api/routes"
@@ -14,20 +12,17 @@ import (
 	"github.com/diwasrimal/easychat/backend/jwt"
 	mw "github.com/diwasrimal/easychat/backend/middleware"
 	"github.com/diwasrimal/easychat/backend/utils"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
-
-	loadEnvFrom(".env")
 	var (
 		dbfile    = utils.MustGetEnv("DB_FILE")
 		addr      = utils.MustGetEnv("SERVER_ADDR")
 		jwtSecret = utils.MustGetEnv("JWT_SECRET")
-		// runMode   = utils.MustGetEnv("MODE")
 	)
 
 	jwt.Init(jwtSecret)
-	// db.MustInit(dburl)
 	db.MustInit("easychat.db")
 	defer db.Close()
 
@@ -49,15 +44,6 @@ func main() {
 		mux.Handle(route, handler)
 	}
 
-	var finalHandler http.Handler
-
-	// switch runMode {
-	// case "dev":
-	// 	// Allow cross origin requests in dev mode
-	// 	finalHandler = cors.AllowAll().Handler(mux)
-	// case "prod":
-	// Use a file server to serve frontend build files in production
-	// also redirect all other routes to /index.html so that react handles it
 	distDir := "./dist"
 	fileServer := http.FileServer(http.Dir(distDir))
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -68,31 +54,9 @@ func main() {
 		}
 		fileServer.ServeHTTP(w, r)
 	})
-	finalHandler = mux
-	// default:
-	// 	panic("Invalid enviroment variable value for 'MODE'")
-	// }
 
 	log.Printf("Using sqlite3 database: %v\n", dbfile)
 	log.Printf("Using jwt secret: %v\n", jwtSecret)
 	log.Printf("Listening on %v...\n", addr)
-	log.Fatal(http.ListenAndServe(addr, finalHandler))
-}
-
-func loadEnvFrom(path string) {
-	f, err := os.Open(path)
-	if err != nil {
-		if err == os.ErrNotExist {
-			log.Printf("Env file: %v doesnot exist", path)
-			return
-		}
-		log.Fatal(err)
-	}
-	sc := bufio.NewScanner(f)
-	for sc.Scan() {
-		key, val, found := strings.Cut(sc.Text(), "=")
-		if found {
-			os.Setenv(key, val)
-		}
-	}
+	log.Fatal(http.ListenAndServe(addr, mux))
 }
