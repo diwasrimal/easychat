@@ -21,3 +21,13 @@ Then from inside the `backend` directory, run
 ```sh
 ./app # or .\app.exe on windows
 ```
+
+## Using docker
+In the project root run
+
+```sh
+docker compose build
+docker compose run
+```
+
+

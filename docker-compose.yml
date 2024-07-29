@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  easychat-app:
+    container_name: easychat-app
+    build: .
+    ports:
+      - "80:3030"
