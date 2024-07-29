@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -52,7 +51,6 @@ func UseAuth(next http.Handler) http.Handler {
 func UseWebsocketAuth(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		token := r.URL.Query().Get("jwt")
-		log.Println("Got token in ws upgrade req: ", token)
 		if len(token) == 0 {
 			utils.SendJsonResp(w, http.StatusUnauthorized, types.Json{"message": "Include jwt token as query param jwt=token"})
 			return

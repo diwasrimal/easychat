@@ -14,21 +14,21 @@ import (
 	"github.com/diwasrimal/easychat/backend/jwt"
 	mw "github.com/diwasrimal/easychat/backend/middleware"
 	"github.com/diwasrimal/easychat/backend/utils"
-	"github.com/rs/cors"
 )
 
 func main() {
 
 	loadEnvFrom(".env")
 	var (
-		dburl     = utils.MustGetEnv("POSTGRES_URL")
+		dbfile    = utils.MustGetEnv("DB_FILE")
 		addr      = utils.MustGetEnv("SERVER_ADDR")
 		jwtSecret = utils.MustGetEnv("JWT_SECRET")
-		runMode   = utils.MustGetEnv("MODE")
+		// runMode   = utils.MustGetEnv("MODE")
 	)
 
 	jwt.Init(jwtSecret)
-	db.MustInit(dburl)
+	// db.MustInit(dburl)
+	db.MustInit("easychat.db")
 	defer db.Close()
 
 	handlers := map[string]http.Handler{
@@ -51,29 +51,29 @@ func main() {
 
 	var finalHandler http.Handler
 
-	switch runMode {
-	case "dev":
-		// Allow cross origin requests in dev mode
-		finalHandler = cors.AllowAll().Handler(mux)
-	case "prod":
-		// Use a file server to serve frontend build files in production
-		// also redirect all other routes to /index.html so that react handles it
-		distDir := "./dist"
-		fileServer := http.FileServer(http.Dir(distDir))
-		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			path := filepath.Join(distDir, r.URL.Path)
-			if _, err := os.Stat(path); os.IsNotExist(err) {
-				http.ServeFile(w, r, filepath.Join(distDir, "index.html"))
-				return
-			}
-			fileServer.ServeHTTP(w, r)
-		})
-		finalHandler = mux
-	default:
-		panic("Invalid enviroment variable value for 'MODE'")
-	}
+	// switch runMode {
+	// case "dev":
+	// 	// Allow cross origin requests in dev mode
+	// 	finalHandler = cors.AllowAll().Handler(mux)
+	// case "prod":
+	// Use a file server to serve frontend build files in production
+	// also redirect all other routes to /index.html so that react handles it
+	distDir := "./dist"
+	fileServer := http.FileServer(http.Dir(distDir))
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		path := filepath.Join(distDir, r.URL.Path)
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			http.ServeFile(w, r, filepath.Join(distDir, "index.html"))
+			return
+		}
+		fileServer.ServeHTTP(w, r)
+	})
+	finalHandler = mux
+	// default:
+	// 	panic("Invalid enviroment variable value for 'MODE'")
+	// }
 
-	log.Printf("Using db: %v\n", dburl)
+	log.Printf("Using sqlite3 database: %v\n", dbfile)
 	log.Printf("Using jwt secret: %v\n", jwtSecret)
 	log.Printf("Listening on %v...\n", addr)
 	log.Fatal(http.ListenAndServe(addr, finalHandler))

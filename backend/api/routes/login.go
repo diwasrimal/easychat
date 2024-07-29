@@ -48,7 +48,6 @@ func LoginPost(w http.ResponseWriter, r *http.Request) api.Response {
 			Payload: types.Json{"message": "No such email is registered"},
 		}
 	}
-	log.Println("Checking password ", password, "against hash", user.PasswordHash)
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
 	if err != nil {
 		return api.Response{

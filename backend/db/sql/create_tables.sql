@@ -1,25 +1,25 @@
--- Users of the application
 CREATE TABLE IF NOT EXISTS users (
-	id bigserial NOT NULL PRIMARY KEY,
-	fullname text NOT NULL,
-	email text NOT NULL UNIQUE,
-	password_hash text NOT NULL
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	fullname TEXT NOT NULL,
+	email TEXT NOT NULL UNIQUE,
+	password_hash TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS messages (
-	id bigserial NOT NULL PRIMARY KEY,
-	sender_id bigserial NOT NULL REFERENCES users(id),
-	receiver_id bigserial NOT NULL REFERENCES users(id),
-	text text NOT NULL,
-	timestamp timestamptz NOT NULL
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	sender_id INTEGER NOT NULL,
+	receiver_id INTEGER NOT NULL,
+	text TEXT NOT NULL,
+	timestamp DATETIME NOT NULL,
+	FOREIGN KEY (sender_id) REFERENCES users(id),
+	FOREIGN KEY (receiver_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS conversations (
-	user1_id bigserial NOT NULL REFERENCES users(id),
-	user2_id bigserial NOT NULL REFERENCES users(id),
-	timestamp timestamptz NOT NULL
+	user1_id INTEGER NOT NULL,
+	user2_id INTEGER NOT NULL,
+	timestamp DATETIME NOT NULL,
+	UNIQUE(user1_id, user2_id),
+	FOREIGN KEY (user1_id) REFERENCES users(id),
+	FOREIGN KEY (user2_id) REFERENCES users(id)
 );
-CREATE UNIQUE INDEX unique_conversation_pair ON conversations(LEAST(user1_id, user2_id), GREATEST(user1_id, user2_id));
-
--- To search users
-CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;

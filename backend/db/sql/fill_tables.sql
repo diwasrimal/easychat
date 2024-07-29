@@ -61,6 +61,4 @@ INSERT INTO conversations (user1_id, user2_id, timestamp) VALUES
 	(1, 6, '2024-05-26 10:20:00+00'),
 	(1, 7, '2024-05-26 11:10:00+00'),
 	(1, 8, '2024-05-26 12:10:00+00'),
-	(1, 9, '2024-05-26 13:10:00+00')
-	ON CONFLICT (LEAST(user1_id, user2_id), GREATEST(user1_id, user2_id))
-	DO UPDATE SET timestamp = excluded.timestamp;
+	(1, 9, '2024-05-26 13:10:00+00');

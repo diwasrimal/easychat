@@ -1,7 +1,6 @@
 package db
 
 import (
-	"context"
 	"time"
 
 	"github.com/diwasrimal/easychat/backend/models"
@@ -9,12 +8,11 @@ import (
 
 func GetMessagesAmong(userId1, userId2 uint64) ([]models.Message, error) {
 	var messages []models.Message
-	rows, err := pool.Query(
-		context.Background(),
-		"SELECT * FROM messages WHERE "+
-			"(sender_id = $1 AND receiver_id = $2) OR "+
-			"(sender_id = $2 AND receiver_id = $1)"+
-			"ORDER BY timestamp DESC",
+	rows, err := db.Query(
+		`SELECT * FROM messages WHERE
+			(sender_id = $1 AND receiver_id = $2) OR
+			(sender_id = $2 AND receiver_id = $1)
+			ORDER BY timestamp DESC`,
 		userId1,
 		userId2,
 	)
@@ -34,8 +32,7 @@ func GetMessagesAmong(userId1, userId2 uint64) ([]models.Message, error) {
 
 func RecordMessage(senderId, receiverId uint64, text string, timestamp time.Time) (uint64, error) {
 	var msgId uint64
-	err := pool.QueryRow(
-		context.Background(),
+	err := db.QueryRow(
 		`INSERT INTO messages(sender_id, receiver_id, text, timestamp)
 			VALUES ($1, $2, $3, $4)
 			RETURNING id`,

@@ -1,7 +1,6 @@
 package db
 
 import (
-	"context"
 	"time"
 
 	"github.com/diwasrimal/easychat/backend/models"
@@ -9,8 +8,7 @@ import (
 
 func GetConversationsOf(userId uint64) ([]models.Conversation, error) {
 	var conversations []models.Conversation
-	rows, err := pool.Query(
-		context.Background(),
+	rows, err := db.Query(
 		"SELECT * FROM conversations WHERE "+
 			"user1_id = $1 OR user2_id = $1 "+
 			"ORDER BY timestamp DESC",
@@ -33,14 +31,19 @@ func GetConversationsOf(userId uint64) ([]models.Conversation, error) {
 // Updates an exsiting conversation's timestamp between two users
 // or creates a new one
 func UpdateOrCreateConversation(senderId, receiverId uint64, timestamp time.Time) error {
-	_, err := pool.Exec(
-		context.Background(),
-		`INSERT INTO conversations(user1_id, user2_id, timestamp) VALUES
-			($1, $2, $3) ON CONFLICT(LEAST(user1_id, user2_id), GREATEST(user1_id, user2_id))
-			DO UPDATE
-			SET timestamp = excluded.timestamp`,
-		senderId,
-		receiverId,
+	// Always keep the samllest id as user1_id during insertion
+	// to keep uniqueness
+	user1Id, user2Id := senderId, receiverId
+	if user1Id > user2Id {
+		user1Id, user2Id = user2Id, user1Id
+	}
+	_, err := db.Exec(
+		`INSERT INTO conversations(user1_id, user2_id, timestamp)
+	 		VALUES ($1, $2, $3)
+			ON CONFLICT(user1_id, user2_id)
+			DO UPDATE SET timestamp = excluded.timestamp`,
+		user1Id,
+		user2Id,
 		timestamp,
 	)
 	return err

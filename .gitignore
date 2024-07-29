@@ -1,8 +1,10 @@
 todo.txt
 
-.zed
-.env
+flask-backend
+backend/db-postgres
 backend/backend
+.env
+.zed
 tmp.txt
 tmp
 
