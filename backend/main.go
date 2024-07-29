@@ -18,7 +18,7 @@ import (
 func main() {
 	var (
 		dbfile    = utils.MustGetEnv("DB_FILE")
-		addr      = utils.MustGetEnv("SERVER_ADDR")
+		port      = utils.MustGetEnv("SERVER_PORT")
 		jwtSecret = utils.MustGetEnv("JWT_SECRET")
 	)
 
@@ -55,6 +55,7 @@ func main() {
 		fileServer.ServeHTTP(w, r)
 	})
 
+	addr := "0.0.0.0:" + port
 	log.Printf("Using sqlite3 database: %v\n", dbfile)
 	log.Printf("Using jwt secret: %v\n", jwtSecret)
 	log.Printf("Listening on %v...\n", addr)
